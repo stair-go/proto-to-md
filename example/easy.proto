@@ -1,0 +1,28 @@
+// Copyright 2015, Google Inc.
+// 测试,test proto
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.helloworld";
+option java_outer_classname = "HelloWorldProto";
+
+package helloworld;
+
+//annotation: service发送一个问候1
+//annotation: service发送一个问候2
+//annotation: service发送一个问候3
+service Greeter {
+  rpc SayHello (HelloRequest) returns (HelloReply) {} //annotation: API发送一个问候
+}
+
+
+//annotation: 请求的结构体
+message HelloRequest {
+  string name = 1; //annotation: HelloRequest!
+}
+
+//annotation: 响应的请求的结构体
+message HelloReply {
+  string message = 1; //annotation: HelloReply!
+}

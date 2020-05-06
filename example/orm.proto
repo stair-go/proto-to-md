@@ -1,0 +1,56 @@
+syntax = "proto3";
+package ormroute;
+
+//API集合注释  annotation标签后面的注释才会写入文档,且必须以 // annotation:开头
+//annotation: 多行注释,每一行都得有annotation:
+service OrmRoute {
+    rpc Add(OneReq) returns (Result) {}  //annotation: 添加接口 正确的格式!
+    rpc Remove(OneReq) returns (Result) {}  //annotation:移除接口!
+    rpc Modify(OneReq) returns (Result) {}  // 没有tag不会写入文档
+    rpc Find(OneReq) returns (Result) {} //  annotation: 不行.前面必须有空格,标签后必须跟一个冒号
+    rpc Transact(OneReq) returns (Result) {} //annotation: 对{}中某一行注释,annotation必须在该行后方,而不是上方
+    //annotation: 这样在行中间的注释也不会写入文档
+    rpc ExecSql(OneReq) returns (Result) {} //执行sql  //annotation:annotation标签前面的内容,不会写入,必须是只有//annotation:
+    rpc NewExecSql(OneReq) returns (NewResult) {} //新的执行sql annotation: 即只会写入第一个annotation: 后面的注释
+    rpc NewTransact(OneReq) returns (NewResult) {} //annotation :NewTransact!
+}
+
+//中间断了一行,则不会写入文档
+//annotation: 多行注释,每一行都得有annotation: 且中间不能断开
+//annotation: message或service 上的多行注释,请不要有空白行
+//annotation: 结构体参数
+message Uri {
+    required string trace = 1;  //annotation: message参数的注释,同api
+    option string db = 2;  // annotation: 另外会过滤掉option,required关键字
+    string db = 3;         // annotation: -------------------
+    string pk = 4;          // annotation:不知道这样全不全面
+    string columns = 5;     // annotation: 就是这样了
+}
+
+// annotation: 测试胡乱加的结构体参数 前面有空格不行
+message test {
+    required string trace = 1;
+    option string db = 2;
+    string db = 3;
+    string pk = 4;
+    string columns = 5;
+}
+
+// annotation: 一个请求  前面有空格不行
+message OneReq {
+    required Uri descrip = 1;   //annotation:结构体参数,会自动表明,所有的结构体参数,会放到文档后方
+    bytes body = 2;
+}
+
+
+// annotation: 一个响应 前面有空格不行
+message Result {
+    option bytes content = 3;
+}
+
+
+//annotation: 一个新的响应 前面没空格可以
+message NewResult{
+    option test code = 1;
+    bytes info = 2;
+}
